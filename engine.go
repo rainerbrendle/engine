@@ -115,20 +115,6 @@ func ping(dbconnect *sql.DB) {
 	checkErr("ping", err)
 }
 
-// Retrieve a new TSN from database as int64
-func newTSN(dbconnect *sql.DB) int64 {
-
-	var tsn int64
-
-	row := dbconnect.QueryRow("select clock.new_tsn()")
-	checkRow(row)
-
-	err := row.Scan(&tsn)
-	checkErr("newTSN", err)
-
-	return tsn
-}
-
 // Add a new database connection
 func add(name string) *Database {
 
@@ -151,6 +137,49 @@ func add(name string) *Database {
 
 	return db
 }
+
+// Calling database stored functions
+
+// Retrieve a new TSN from database as int64
+func newTSN(dbconnect *sql.DB) int64 {
+
+	var tsn int64
+
+	row := dbconnect.QueryRow("select clock.new_tsn()")
+	checkRow(row)
+
+	err := row.Scan(&tsn)
+	checkErr("newTSN", err)
+
+	return tsn
+}
+
+// Put a new value
+func putPowerData(dbconnect *sql.DB, in_key string, in_value string) {
+
+	_, err := dbconnect.Exec("select power.put( $1, $2 )", in_key, in_value)
+
+	checkErr("power.put", err)
+
+	return
+}
+
+// get a value
+func getPowerData(dbconnect *sql.DB, in_key string) string {
+
+	var out_value string
+
+	row := dbconnect.QueryRow("select power.get( $1 )", in_key)
+	checkRow(row)
+
+	err := row.Scan(&out_value)
+	checkErr("getPowerData", err)
+
+	return out_value
+}
+
+//
+// PACKAGE EXPORTS
 
 // Get the database for a given name
 //
@@ -188,5 +217,43 @@ func (db *Database) NewTSN() (tsn int64, err error) {
 	}()
 
 	tsn = newTSN(db.dbconnect)
+	return
+}
+
+// Put power.data
+//
+// Package Export
+func (db *Database) PutPowerData(in_key string, in_value string) (err error) {
+
+	defer func() {
+
+		if r := recover(); r != nil {
+			// recover from panic
+			err = errors.New("error while inserting power data")
+
+		}
+
+	}()
+
+	putPowerData(db.dbconnect, in_key, in_value)
+	return
+}
+
+// Get Power.data
+//
+// Package Export
+func (db *Database) GetPowerData() (in_key string, out_value string, err error) {
+
+	defer func() {
+
+		if r := recover(); r != nil {
+			// recover from panic
+			err = errors.New("error while getting power data")
+
+		}
+
+	}()
+
+	out_value = getPowerData(db.dbconnect, in_key)
 	return
 }
