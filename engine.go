@@ -12,6 +12,7 @@ import (
 	"errors"
 	"fmt"
 	_ "github.com/lib/pq"
+	"log"
 	"os"
 	"strings"
 	"sync"
@@ -39,8 +40,8 @@ var databasesRWLock sync.RWMutex
 // database connect string,
 // to be read from configuration
 //
-// We read from the environment at first (secure store needed eventually)
-var dbTemplate string = ""
+// We read from the environment later (secure store needed eventually)
+var dbTemplate string = "user=rainer dbname=rainer sslmode=disable"
 
 // helper function for tracing (some better idea needed)
 func checkString(name, value string) {
@@ -90,7 +91,7 @@ func checkErr(trace string, err error) {
 
 	if err != nil {
 		fmt.Printf("ERROR: %#v\n", err)
-		panic(err)
+		log.Panic(err)
 	}
 
 }
