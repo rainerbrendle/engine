@@ -111,7 +111,7 @@ func TestPutPowerData10(t *testing.T) {
 		t.FailNow()
 	}
 
-	for i := 0; i < 10000; i++ {
+	for i := 0; i < 10; i++ {
 
 		err = db.PutPowerData("TESTX", fmt.Sprintf("%v %v", in_value, i))
 
