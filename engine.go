@@ -242,7 +242,7 @@ func (db *Database) PutPowerData(in_key string, in_value string) (err error) {
 // Get Power.data
 //
 // Package Export
-func (db *Database) GetPowerData() (in_key string, out_value string, err error) {
+func (db *Database) GetPowerData(in_key string) (out_value string, err error) {
 
 	defer func() {
 
@@ -255,5 +255,6 @@ func (db *Database) GetPowerData() (in_key string, out_value string, err error) 
 	}()
 
 	out_value = getPowerData(db.dbconnect, in_key)
-	return
+
+	return out_value, err
 }
