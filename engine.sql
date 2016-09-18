@@ -19,7 +19,7 @@ CREATE SCHEMA IF NOT EXISTS power;
  */
 CREATE TABLE power.data (
     tsn bigint primary key,
-    key text   not null,
+    key text   unique,
     value text
 );
 
