@@ -18,9 +18,10 @@ CREATE SCHEMA IF NOT EXISTS power;
  * value is text (to be replaced to JSON data or others
  */
 CREATE TABLE power.data (
-    tsn bigint primary key,
-    key text   unique,
-    value text
+    tsn bigint,
+    key text,
+    value text,
+    primary key(tsn, key)
 );
 
 /* Functions for put and get

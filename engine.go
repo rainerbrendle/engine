@@ -178,6 +178,16 @@ func getPowerData(dbconnect *sql.DB, in_key string) string {
 	return out_value
 }
 
+// delete an entry
+func deletePowerData(dbconnect *sql.DB, in_key string) {
+
+	_, err := dbconnect.Exec("select power.delete( $1 )", in_key)
+
+	checkErr("power.delete", err)
+
+	return
+}
+
 //
 // PACKAGE EXPORTS
 

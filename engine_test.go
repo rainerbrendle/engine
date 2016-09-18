@@ -101,6 +101,14 @@ func TestPutPowerData(t *testing.T) {
 }
 
 func TestPutPowerData10(t *testing.T) {
+	testPutPowerDataX(t, 10)
+}
+
+func TestPutPowerData1000(t *testing.T) {
+	testPutPowerDataX(t, 1000)
+}
+
+func testPutPowerDataX(t *testing.T, count int) {
 
 	var in_value = "Hello"
 
@@ -111,7 +119,7 @@ func TestPutPowerData10(t *testing.T) {
 		t.FailNow()
 	}
 
-	for i := 0; i < 10; i++ {
+	for i := 0; i < count; i++ {
 
 		err = db.PutPowerData("TESTX", fmt.Sprintf("%v %v", in_value, i))
 
@@ -121,7 +129,7 @@ func TestPutPowerData10(t *testing.T) {
 		}
 	}
 
-	fmt.Printf("TESTX put with value %v\n", in_value)
+	fmt.Printf("TESTX put with value %v (%v times)\n", in_value, count)
 
 }
 
