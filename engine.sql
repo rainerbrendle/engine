@@ -53,6 +53,14 @@ CREATE OR REPLACE FUNCTION power.get( _key text)
 $$ LANGUAGE plpgsql;
 
 
+CREATE OR REPLACE FUNCTION power.delete( _key text ) RETURNS VOID AS $$
+   BEGIN
+
+     INSERT INTO power.data( tsn, key, value) 
+     VALUES( nextval( 'clock.tsn' ), _key, NULL ); 
+
+   END;
+$$ LANGUAGE plpgsql;
 /*
  * we want to create a clock as a singleton. Since the clock is basically a sequence,
  * the global clock is defined as a schema containing a sequence as the base structure

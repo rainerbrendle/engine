@@ -167,7 +167,7 @@ func putPowerData(dbconnect *sql.DB, in_key string, in_value string) {
 // get a value
 func getPowerData(dbconnect *sql.DB, in_key string) string {
 
-	var out_value string
+	var out_value sql.NullString
 
 	row := dbconnect.QueryRow("select power.get( $1 )", in_key)
 	checkRow(row)
@@ -175,7 +175,12 @@ func getPowerData(dbconnect *sql.DB, in_key string) string {
 	err := row.Scan(&out_value)
 	checkErr("getPowerData", err)
 
-	return out_value
+	if out_value.Valid == true {
+		return out_value.String
+	} else {
+		return ""
+	}
+
 }
 
 // delete an entry
