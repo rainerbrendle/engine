@@ -179,6 +179,7 @@ func getPowerData(dbconnect *sql.DB, in_key string) string {
 		return out_value.String
 	} else {
 		return ""
+		/* NULL value means not there */
 	}
 
 }
